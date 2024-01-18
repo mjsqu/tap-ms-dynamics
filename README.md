@@ -66,6 +66,26 @@ And the other values mentioned in the authentication section above.
 }
 ```
 
+This feature branch allows the use of an access token, which can be used for testing if you do not have an app registration active. First go to this URL in a browser to get the access token - sign in using the Microsoft Account you with to test with:
+
+```
+https://login.microsoftonline.com/common/oauth2/authorize?resource=https://<org>.api.<instance_region>.dynamics.com&response_type=token&client_id=51f81489-12ee-4a9e-aaae-a2591f45987d&redirect_uri=https://localhost
+```
+
+(The client ID appears in the instructions here and is open for any Dynamics app: https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/setup-postman-environment)
+
+The access token will appear in the address bar, now set up the config.json file:
+
+```json
+{
+	"access_token":"eyJ0eXAiOiJKV1QiLCJh....",
+  "start_date": "2021-04-01T00:00:00Z",
+  "user_agent": "Stitch Tap (+support@stitchdata.com)",
+  "organization_uri": "https://<org>.api.<instance_region>.dynamics.com",
+  "api_version": "9.2"
+}
+```
+
 3. Run the Tap in Discovery Mode This creates a catalog.json for selecting objects/fields to integrate:
 
 ```bash

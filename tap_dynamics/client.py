@@ -103,7 +103,7 @@ class DynamicsClient:
             json.dump(config, file, indent=2)
 
     def _ensure_access_token(self):
-        if self.access_token is None or self.expires_at <= datetime.utcnow():
+        if self.access_token is None:
             response = self.session.post(
                 'https://login.microsoftonline.com/common/oauth2/token',
                 data={
