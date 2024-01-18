@@ -70,7 +70,8 @@ class DynamicsClient:
                 user_agent=None,
                 redirect_uri=None,
                 refresh_token=None,
-                start_date=None):
+                start_date=None,
+                access_token=None):
         self.organization_uri = organization_uri
         self.api_version = api_version if api_version else API_VERSION
         max_pagesize = MAX_PAGESIZE if max_pagesize is None else max_pagesize # tap-tester was failing otherwise
@@ -82,7 +83,7 @@ class DynamicsClient:
         self.refresh_token = refresh_token
 
         self.session = requests.Session()
-        self.access_token = None
+        self.access_token = access_token
         self.expires_at = None
 
         self.start_date = start_date

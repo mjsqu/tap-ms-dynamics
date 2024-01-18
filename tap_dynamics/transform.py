@@ -51,4 +51,5 @@ def get_client_args(config):
         "redirect_uri":     config.get('redirect_uri'),
         "refresh_token":    config.get('refresh_token'),
         "start_date":       config.get('start_date'),
+        "access_token":     config.get('access_token'),
     }
