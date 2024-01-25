@@ -47,8 +47,6 @@ def get_client_args(config):
         "api_version":      config.get('api_version'),
         "client_id":        config.get('client_id'),
         "client_secret":    config.get('client_secret'),
-        "user_agent":       config.get('user_agent'),
-        "redirect_uri":     config.get('redirect_uri'),
-        "refresh_token":    config.get('refresh_token'),
+        "tenant_id":        config.get('tenant_id'),
         "start_date":       config.get('start_date'),
     }

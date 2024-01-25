@@ -67,9 +67,7 @@ class DynamicsClient:
                 api_version=None,
                 client_id=None,
                 client_secret=None,
-                user_agent=None,
-                redirect_uri=None,
-                refresh_token=None,
+                tenant_id=None,
                 start_date=None):
         self.organization_uri = organization_uri
         self.api_version = api_version if api_version else API_VERSION
@@ -77,9 +75,7 @@ class DynamicsClient:
         self.max_pagesize = max_pagesize if max_pagesize <= MAX_PAGESIZE else MAX_PAGESIZE
         self.client_id = client_id
         self.client_secret = client_secret
-        self.redirect_uri = redirect_uri
-        self.user_agent = user_agent
-        self.refresh_token = refresh_token
+        self.tenant_id = tenant_id
 
         self.session = requests.Session()
         self.access_token = None
@@ -96,32 +92,28 @@ class DynamicsClient:
         with open(self.config_path) as file:
             config = json.load(file)
 
-        config['refresh_token'] = refresh_token
-
         with open(self.config_path, 'w') as file:
             json.dump(config, file, indent=2)
 
     def _ensure_access_token(self):
         if self.access_token is None or self.expires_at <= datetime.utcnow():
             response = self.session.post(
-                'https://login.microsoftonline.com/common/oauth2/token',
+                f"https://login.microsoftonline.com/{self.tenant_id}/oauth2/token",
                 data={
                     'client_id': self.client_id,
                     'client_secret': self.client_secret,
-                    'redirect_uri': self.redirect_uri,
-                    'refresh_token': self.refresh_token,
-                    'grant_type': 'refresh_token',
-                    'resource': self.organization_uri
+                    'grant_type': 'client_credentials',
+                    'resource': self.organization_uri,
+                    'scope': f"{self.organization_uri}/.default",
                 })
 
             if response.status_code != 200:
+                LOGGER.warning(response.text)
                 raise DynamicsException('Non-200 response fetching Dynamics access token')
 
             data = response.json()
 
             self.access_token = data.get('access_token')
-            if self.refresh_token != data.get('refresh_token'):
-                self._write_config(data.get('refresh_token'))
 
             # pad by 10 seconds for clock drift
             self.expires_at = datetime.utcnow() + \
@@ -130,10 +122,6 @@ class DynamicsClient:
     def _get_standard_headers(self):
         return {
             "Authorization": "Bearer {}".format(self.access_token),
-            "User-Agent": self.user_agent,
-            "OData-MaxVersion": "4.0",
-            "OData-Version": "4.0",
-            "If-None-Match": "null"
             }
 
     @backoff.on_exception(retry_after_wait_gen,

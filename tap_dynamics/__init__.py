@@ -7,11 +7,8 @@ from tap_dynamics.sync import sync
 REQUIRED_CONFIG_KEYS = [
     "start_date",
     "organization_uri",
-    "user_agent",
     "client_id",
     "client_secret",
-    "redirect_uri",
-    "refresh_token"
 ]
 LOGGER = singer.get_logger()
 
