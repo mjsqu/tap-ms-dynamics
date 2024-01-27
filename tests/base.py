@@ -57,7 +57,7 @@ class DynamicsBaseTest(unittest.TestCase):
     @staticmethod
     def get_credentials():
         """Authentication information for the test account"""
-        return {"organization_uri": os.getenv('TAP_DYNAMICS_ORG_URI'),
+        return {"resource": os.getenv('TAP_DYNAMICS_RESOURCE'),
                 "client_id": os.getenv('TAP_DYNAMICS_CLIENT_ID'),
                 "client_secret": os.getenv('TAP_DYNAMICS_CLIENT_SECRET'),
                 "redirect_uri": os.getenv('TAP_DYNAMICS_REDIRECT_URI'),

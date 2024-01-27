@@ -6,7 +6,7 @@ from tap_dynamics.sync import sync
 
 REQUIRED_CONFIG_KEYS = [
     "start_date",
-    "organization_uri",
+    "resource",
     "client_id",
     "client_secret",
 ]
