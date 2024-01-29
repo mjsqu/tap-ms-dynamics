@@ -41,7 +41,7 @@ def transform_metadata_xml(xml:str) -> dict:
 
 def get_client_args(config):
     return {
-        "resource": config.get('resource'),
+        "organization_url": config.get('organization_url'),
         "config_path":      config.get('config_path'),
         "max_pagesize":     config.get('max_pagesize'),
         "api_version":      config.get('api_version'),

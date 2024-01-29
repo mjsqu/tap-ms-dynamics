@@ -61,7 +61,7 @@ class Dynamics429Exception(DynamicsException):
 # pylint: disable=too-many-instance-attributes
 class DynamicsClient:
     def __init__(self,
-                resource,
+                organization_url,
                 config_path,
                 max_pagesize,
                 api_version=None,
@@ -69,7 +69,7 @@ class DynamicsClient:
                 client_secret=None,
                 tenant_id=None,
                 start_date=None):
-        self.resource = resource
+        self.organization_url = organization_url
         self.api_version = api_version if api_version else API_VERSION
         max_pagesize = MAX_PAGESIZE if max_pagesize is None else max_pagesize # tap-tester was failing otherwise
         self.max_pagesize = max_pagesize if max_pagesize <= MAX_PAGESIZE else MAX_PAGESIZE
@@ -103,8 +103,8 @@ class DynamicsClient:
                     'client_id': self.client_id,
                     'client_secret': self.client_secret,
                     'grant_type': 'client_credentials',
-                    'resource': self.resource,
-                    'scope': f"{self.resource}/.default",
+                    'resource': self.organization_url,
+                    'scope': f"{self.organization_url}/.default",
                 })
 
             if response.status_code != 200:
@@ -135,7 +135,7 @@ class DynamicsClient:
                           on_backoff=log_backoff_attempt)
     def _make_request(self, method, endpoint, paging=False, headers=None, params=None, data=None):
         if not paging:
-            full_url = f'{self.resource}/api/data/v{self.api_version}/{endpoint}'
+            full_url = f'{self.organization_url}/api/data/v{self.api_version}/{endpoint}'
         else: full_url = endpoint
 
         LOGGER.info(
