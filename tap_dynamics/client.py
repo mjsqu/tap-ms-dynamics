@@ -120,8 +120,13 @@ class DynamicsClient:
                 timedelta(seconds=int(data.get('expires_in')) - 10)
 
     def _get_standard_headers(self):
+        # Documentation recommends "Accept: application/json" but then $metadata
+        # xml request does not work
         return {
             "Authorization": "Bearer {}".format(self.access_token),
+            "OData-MaxVersion": "4.0",
+            "OData-Version": "4.0",
+            "If-None-Match": "null"
             }
 
     @backoff.on_exception(retry_after_wait_gen,
